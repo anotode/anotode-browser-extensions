@@ -2,10 +2,61 @@
 <html>
 <head>
   <title>Anotode</title>
+  <script src="assets/jquery/jquery-2.2.4.min.js"></script>
+  <script src="lib/js/popup.js"></script>
+
+  <!-- css -->
+  <link rel="stylesheet" href="assets/bootstrap-3.3.7/bootstrap.min.css">
+  <link rel="stylesheet" href="lib/css/popup.css">
+
 </head>
 <body>
-  <h3>Welcome to Anotode</h3>
+<h4>Welcome to Anotode</h4>
 
-  Sign in to get started
+<p>
+  Anotode is an amazing online highlighter and note taking application.
+</p>
+
+<div id="auth-buttons-view" class="container">
+  <div class="row">
+    <div class="col-xs-6">
+      <button class="btn btn-primary" id="signInBtn">Sign in</button>
+    </div>
+    <div class="col-xs-6">
+      <button class="btn btn-default" id="registerBtn">Register</button>
+    </div>
+  </div>
+</div>
+
+<!-- login form -->
+<div id="sign-in-view" class="hidden">
+  <form>
+    <div class="form-group">
+      <label for="sign_in_email">Email address</label>
+      <input type="email" class="form-control" id="sign_in_email" placeholder="Email">
+    </div>
+    <div class="form-group">
+      <label for="sign_in_password">Password</label>
+      <input type="password" class="form-control" id="sign_in_password" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-default">Login</button>
+  </form>
+</div>
+
+<!-- registration form -->
+<div id="register-view" class="hidden">
+  <form>
+    <div class="form-group">
+      <label for="register_email">Email address</label>
+      <input type="email" class="form-control" id="register_email" placeholder="Email">
+    </div>
+    <div class="form-group">
+      <label for="register_password">Password</label>
+      <input type="password" class="form-control" id="register_password" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-default">Register</button>
+  </form>
+</div>
+
 </body>
 </html>
