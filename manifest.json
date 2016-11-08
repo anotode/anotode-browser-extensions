@@ -9,6 +9,31 @@
     "storage",
     "http://anotode.herokuapp.com/"
   ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "assets/jquery/jquery-2.2.4.min.js",
+        "content.js"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "assets/jquery/jquery-2.2.4.min.js",
+      "bg.js"
+    ],
+    "persistent": false
+  },
+  "commands": {
+    "highlight-selected-text": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Highlight selected text"
+    }
+  },
   "browser_action": {
     "default_title": "Anotode",
     "default_icon": "icon.png",
