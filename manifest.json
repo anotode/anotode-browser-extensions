@@ -12,6 +12,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
+      "css": ["lib/css/content.css"],
       "js": [
         "assets/jquery/jquery-2.2.4.min.js",
         "content.js"
