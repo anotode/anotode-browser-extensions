@@ -9,34 +9,30 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
   }
 })
 
-// 3rd
-// http://stackoverflow.com/questions/926580/find-text-string-using-jquery
-function colourText2(text){
-  console.log(text)
-  $('*:contains("' + text + '"):last').each(function(){  // find nearest occurence
-    //if($(this).children().length < 1)
-      var hay = text.replace(/\s/g, '(<.*?>)*')
-      console.log(hay)
-      $(this).html(
-        $(this).html().replace(
-          text
-          ,"<span class='anotode-highlighted-text'>" + text + "</span>"
-        )
-      )
-  })
-}
-
-// problem - chrome tinkering with wrong nested tags
-// soln - manual breaking highlight tag
+// BUG - half words if highlighted cannot be highlighted over, problem with word spaced regex
 function colourText(text){
+  text = escapeRegExp(text)
   var hay = text.replace(/\s/g, '(<[^\>]*?>|\\s)*')
-  console.log(hay)
-  var reg = new RegExp("(" + hay + ")")
+  var reg = new RegExp("(" + hay + ")")  // g option matches more than one, without g only one
   console.log(reg)
+  // match and break tags (as side nesting tags is invalid)
+  var bodyHtml = $(document.body).html()
+  var match = bodyHtml.match(reg)
+  var repl = match[0].replace(
+    /(<.*?>)/g,
+    "</span>" + "$1" + "<span class='anotode-highlighted-text'>"
+  )
+  console.log(repl)
+
   $(document.body).html(
-    $(document.body).html().replace(
-       reg
-      ,"<span class='anotode-highlighted-text'>" + "$1" + "</span>"
+    bodyHtml.replace(
+       match[0]
+      ,"<span class='anotode-highlighted-text'>" + repl + "</span>"
     )
   )
+}
+
+// http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
