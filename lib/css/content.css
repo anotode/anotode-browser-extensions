@@ -1,3 +1,7 @@
 .anotode-highlighted-text {
   background-color: yellow;
 }
+
+.anotode-highlighted-text-waiting {
+  background-color: greenyellow;
+}

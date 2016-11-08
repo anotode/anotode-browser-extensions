@@ -1,4 +1,5 @@
 
+// TODO: Dont work if not login
 chrome.commands.onCommand.addListener(function(command) {
   if (command == "highlight-selected-text"){
     getCurrentTab(function(tab){
