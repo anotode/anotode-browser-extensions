@@ -5,7 +5,9 @@
   "version": "0.1",
   "description": "Anotode Browser Extension",
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "storage",
+    "http://anotode.herokuapp.com/"
   ],
   "browser_action": {
     "default_title": "Anotode",
