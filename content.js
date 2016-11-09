@@ -6,6 +6,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
     var selText = window.getSelection().toString()
     colourText(selText)
     sendResponse({data: selText})
+  } else if (message.method == "console_log"){
+    // console logger
+    console.log(message.data)
   }
 })
 
