@@ -8,6 +8,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
   } else if (message.method == "console_log"){
     // console logger
     console.log(message.data)
+  } else if (message.method == "highlight_text"){
+    colourText(message.text)
   }
 })
 
