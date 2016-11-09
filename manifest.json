@@ -15,6 +15,7 @@
       "css": ["lib/css/content.css"],
       "js": [
         "assets/jquery/jquery-2.2.4.min.js",
+        "lib/js/storage-chrome.js",
         "content.js"
       ]
     }

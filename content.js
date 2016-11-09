@@ -1,4 +1,3 @@
-console.log("Hi")
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
   if (message.method == "get_selected_text"){
@@ -39,3 +38,23 @@ function colourText(text){
 function escapeRegExp(str) {
   return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 }
+
+
+/*
+ * FETCH DATA FROM SERVER AND HIGHLIGHT
+ * TODO: optimize with url_eq selector
+ */
+getKey("token", function(token){
+  $.getJSON(
+    "http://anotode.herokuapp.com/api/highlights?token=" + token,
+    function(data, textStatus, jqXHR){
+      console.log(data)
+      var currentUrl = window.location.href
+      for (i=0; i<data.length; i++){
+        if (data[i].url == currentUrl){
+          colourText(data[i].text)
+        }
+      }
+    }
+  )
+})
