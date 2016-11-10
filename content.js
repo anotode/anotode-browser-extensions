@@ -47,11 +47,17 @@ function escapeRegExp(str) {
  * TODO: optimize with url_eq selector
  */
 getKey("token", function(token){
+  if (token == null)
+    return;
+  var currentUrl = window.location.href
   $.getJSON(
-    "http://anotode.herokuapp.com/api/highlights?token=" + token,
+    "https://anotode.herokuapp.com/api/highlights?token=" + token + "&url_eq=" + encodeURIComponent(currentUrl),
+    // ^^ http falls victim to cross origin restriction policy
+    // http://stackoverflow.com/questions/26285539/
+    // bg.js has no such restriction as it has the url in permissions
+    // http://stackoverflow.com/questions/36348559/chrome
     function(data, textStatus, jqXHR){
       console.log(data)
-      var currentUrl = window.location.href
       for (i=0; i<data.length; i++){
         if (data[i].url == currentUrl){
           colourText(data[i].text)

@@ -5,3 +5,7 @@ html, body {
 body {
   padding: 10px;
 }
+
+#auth-buttons-view .col-xs-6 {
+  padding: 0;
+}
