@@ -10,11 +10,59 @@ chrome.commands.onCommand.addListener(function(command) {
       chrome.tabs.sendMessage(tab.id, {method: "get_selected_text"}, function(resp){
         // save on server -- create data
         console.log(resp.data)
-        annotateText(resp.data, tab)
+        showHighlightPopup(tab, resp.data)
+        //annotateText(resp.data, tab)
       })
     })
   }
 })
+
+/*
+ * Message Listeners
+ */
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+  /*
+   * Save Highlight after editing
+   */
+  if (message.method == "save_highlight"){
+    console.log(message)
+  }
+})
+
+/*
+ * Show popup menu to edit highlight and add attributes
+ */
+function showHighlightPopup(parentTab, text){
+  // Make window configuration
+  var cfg = {
+    url: 'components/highlight_edit.html',
+    type: 'popup',
+    focused: true,
+    width: 400,
+    height: 400
+  }
+  // Create window
+  chrome.windows.create(cfg, function (window) {
+    var tab = window.tabs[0]
+    // fill form call
+    var fillTab = function () {
+      var data = {
+        method: "highlight_edit",
+        title: parentTab.title,
+        url: parentTab.url,
+        text: text
+      }
+      chrome.tabs.sendMessage(tab.id, data)
+    }
+    // send fill form call
+    if (tab.status == "complete"){
+      fillTab()
+    } else {
+      // TODO: ugly hack
+      setTimeout(fillTab, 1000)
+    }
+  })
+}
 
 /*
  * Given the text, annotate it
@@ -51,6 +99,7 @@ function annotateText(text, tab){
     request(token)
   })
 }
+
 /*
  * CONTEXT MENUS
  */

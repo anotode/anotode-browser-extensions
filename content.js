@@ -5,9 +5,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
     var selText = window.getSelection().toString()
     colourText(selText)
     sendResponse({data: selText})
-  } else if (message.method == "console_log"){
     // console logger
+  } else if (message.method == "console_log"){
     console.log(message.data)
+    // text highlight
   } else if (message.method == "highlight_text"){
     colourText(message.text)
   }
