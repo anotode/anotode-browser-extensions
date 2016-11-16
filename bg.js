@@ -8,10 +8,9 @@ chrome.commands.onCommand.addListener(function(command) {
     getCurrentTab(function(tab){
       // send message to tab to get text
       chrome.tabs.sendMessage(tab.id, {method: "get_selected_text"}, function(resp){
-        // save on server -- create data
+        // prepare to save
         console.log(resp.data)
         showHighlightPopup(tab, resp.data)
-        //annotateText(resp.data, tab)
       })
     })
   }
@@ -26,6 +25,16 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
    */
   if (message.method == "save_highlight"){
     console.log(message)
+    var parentTab = message.parentTab
+    // delete extra keys
+    delete message.method
+    delete message.parentTab
+    // save and highlight
+    annotateText(message, parentTab)
+    chrome.tabs.sendMessage(
+      parentTab.id,
+      {method: "highlight_text", text: message.text}
+    )
   }
 })
 
@@ -48,8 +57,7 @@ function showHighlightPopup(parentTab, text){
     var fillTab = function () {
       var data = {
         method: "highlight_edit",
-        title: parentTab.title,
-        url: parentTab.url,
+        parentTab: parentTab,
         text: text
       }
       chrome.tabs.sendMessage(tab.id, data)
@@ -59,23 +67,16 @@ function showHighlightPopup(parentTab, text){
       fillTab()
     } else {
       // TODO: ugly hack
-      setTimeout(fillTab, 1000)
+      setTimeout(fillTab, 600)
     }
   })
 }
 
 /*
- * Given the text, annotate it
+ * Given the text and other things, save it to server
  */
-function annotateText(text, tab){
-  var data = JSON.stringify({
-    url: tab.url,
-    text: text,
-    title: tab.title,
-    category: "Project",
-    tags: ["chrome", "testing"],
-    comment: "This is very important"
-  })
+function annotateText(hlData, tab){
+  var data = JSON.stringify(hlData)
   console.log(data)
   // request function
   var request = function(token){
@@ -112,11 +113,7 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener(function(info, tab){
   if (info.menuItemId == "anotode-annotate"){
     console.log(info.selectionText)
-    annotateText(info.selectionText, tab)
-    chrome.tabs.sendMessage(
-      tab.id,
-      {method: "highlight_text", text: info.selectionText}
-    )
+    showHighlightPopup(tab, info.selectionText)
   }
 })
 
