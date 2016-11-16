@@ -44,7 +44,6 @@ function escapeRegExp(str) {
 
 /*
  * FETCH DATA FROM SERVER AND HIGHLIGHT
- * TODO: optimize with url_eq selector
  */
 getKey("token", function(token){
   if (token == null)
@@ -65,4 +64,23 @@ getKey("token", function(token){
       }
     }
   )
+
+  /*
+   * HIGHLIGHT Google Searches
+   */
+  var googleRegex = new RegExp("google[^/]+/search.q=")  // ? doesnt match in url. no idea why
+  var matches = currentUrl.match(googleRegex)
+  if (matches) {
+    $.getJSON(
+      "https://anotode.herokuapp.com/api/highlights/urls?token=" + token,
+      function (data, textStatus, jqXHR) {
+        $("h3.r").each(function () {
+          var link = $(this).find("a").attr("href")
+          if (data.indexOf(link) != -1) {
+            $(this).find("a").addClass("anotode-search-highlight")
+          }
+        })
+      }
+    )
+  }
 })

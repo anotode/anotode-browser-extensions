@@ -5,3 +5,8 @@
 .anotode-highlighted-text-waiting {
   background-color: greenyellow;
 }
+
+.anotode-search-highlight {
+  border-bottom: 1px solid black;
+  font-weight: bold !important;
+}
