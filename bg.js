@@ -8,26 +8,75 @@ chrome.commands.onCommand.addListener(function(command) {
     getCurrentTab(function(tab){
       // send message to tab to get text
       chrome.tabs.sendMessage(tab.id, {method: "get_selected_text"}, function(resp){
-        // save on server -- create data
+        // prepare to save
         console.log(resp.data)
-        annotateText(resp.data, tab)
+        showHighlightPopup(tab, resp.data)
       })
     })
   }
 })
 
 /*
- * Given the text, annotate it
+ * Message Listeners
  */
-function annotateText(text, tab){
-  var data = JSON.stringify({
-    url: tab.url,
-    text: text,
-    title: tab.title,
-    category: "Project",
-    tags: ["chrome", "testing"],
-    comment: "This is very important"
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
+  /*
+   * Save Highlight after editing
+   */
+  if (message.method == "save_highlight"){
+    console.log(message)
+    var parentTab = message.parentTab
+    // delete extra keys
+    delete message.method
+    delete message.parentTab
+    // save and highlight
+    annotateText(message, parentTab)
+    chrome.tabs.sendMessage(
+      parentTab.id,
+      {method: "highlight_text", text: message.text}
+    )
+  }
+})
+
+/*
+ * Show popup menu to edit highlight and add attributes
+ */
+function showHighlightPopup(parentTab, text){
+  // Make window configuration
+  var cfg = {
+    url: 'components/highlight_edit.html',
+    type: 'popup',
+    focused: true,
+    width: 400,
+    height: 400
+  }
+  // Create window
+  chrome.windows.create(cfg, function (window) {
+    var tab = window.tabs[0]
+    // fill form call
+    var fillTab = function () {
+      var data = {
+        method: "highlight_edit",
+        parentTab: parentTab,
+        text: text
+      }
+      chrome.tabs.sendMessage(tab.id, data)
+    }
+    // send fill form call
+    if (tab.status == "complete"){
+      fillTab()
+    } else {
+      // TODO: ugly hack
+      setTimeout(fillTab, 600)
+    }
   })
+}
+
+/*
+ * Given the text and other things, save it to server
+ */
+function annotateText(hlData, tab){
+  var data = JSON.stringify(hlData)
   console.log(data)
   // request function
   var request = function(token){
@@ -51,6 +100,7 @@ function annotateText(text, tab){
     request(token)
   })
 }
+
 /*
  * CONTEXT MENUS
  */
@@ -63,11 +113,7 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener(function(info, tab){
   if (info.menuItemId == "anotode-annotate"){
     console.log(info.selectionText)
-    annotateText(info.selectionText, tab)
-    chrome.tabs.sendMessage(
-      tab.id,
-      {method: "highlight_text", text: info.selectionText}
-    )
+    showHighlightPopup(tab, info.selectionText)
   }
 })
 
