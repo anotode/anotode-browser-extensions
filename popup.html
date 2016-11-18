@@ -5,6 +5,7 @@
   <script src="assets/jquery/jquery-2.2.4.min.js"></script>
   <script src="lib/js/storage-chrome.js"></script>
   <script src="lib/js/popup.js"></script>
+  <script src="assets/bootstrap-3.3.7/bootstrap.min.js"></script>
 
   <!-- css -->
   <link rel="stylesheet" href="assets/bootstrap-3.3.7/bootstrap.min.css">
@@ -15,6 +16,12 @@
 <h4>Anotode</h4>
 
 <div id="intro_text">
+  <!-- error box -->
+  <div class="alert alert-danger alert-dismissible hidden" id="danger-box" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <span class="message">Warning! Better check yourself, you're not looking too good.</span>
+  </div>
+  <!-- normal header -->
   <p>
   Anotode is an amazing online highlighter and note taking application.
   </p>
