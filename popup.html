@@ -17,7 +17,7 @@
 
 <div id="intro_text">
   <!-- error box -->
-  <div class="alert alert-danger alert-dismissible" id="danger-box" role="alert">
+  <div class="alert alert-info alert-dismissible" id="danger-box" role="alert">
     <a class="close">&times;</a>
     <span class="message">Warning! Better check yourself, you're not looking too good.</span>
   </div>
@@ -58,7 +58,8 @@
       <label for="sign_in_password">Password</label>
       <input type="password" class="form-control" id="sign_in_password" placeholder="Password">
     </div>
-    <button type="submit" id="doLoginBtn" class="btn btn-default">Login</button>
+    <button type="submit" id="doLoginBtn" class="btn btn-primary">Login</button>
+    <a href="#" id="forgot_pwd_link" class="btn btn-default">Forgot Password</a>
   </form>
 </div>
 
@@ -78,6 +79,17 @@
       <input type="password" class="form-control" id="register_password" placeholder="Password">
     </div>
     <button type="submit" id="doRegisterBtn" class="btn btn-default">Register</button>
+  </form>
+</div>
+
+<!-- forgot password form -->
+<div id="forgot-view" class="user-form hidden">
+  <form>
+    <div class="form-group">
+      <label for="forgot_email">Email address</label>
+      <input type="email" class="form-control" id="forgot_email" placeholder="Email">
+    </div>
+    <button type="submit" id="forgotBtn" class="btn btn-default">Send Reset Link</button>
   </form>
 </div>
 
