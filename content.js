@@ -14,9 +14,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
   }
 })
 
-// TODO: BUG - half words if highlighted cannot be highlighted over, problem with word spaced regex
 function colourText(text){
   text = escapeRegExp(text)
+  // match half words -- some<b>word</b>
+  // very slow tech
+  text = text.replace(/([^\s\\])/g, '$1(<[^\>]*?>)*')
+  console.log(text)
+  // TODO: match escaped html in code
   var hay = text.replace(/\s/g, '(<[^\>]*?>|\\s)*')
   var reg = new RegExp("(" + hay + ")")  // g option matches more than one, without g only one
   console.log(reg)
