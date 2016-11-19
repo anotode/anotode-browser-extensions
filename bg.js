@@ -5,12 +5,17 @@ chrome.commands.onCommand.addListener(function(command) {
    * Highlight text and save it on server
    */
   if (command == "highlight-selected-text"){
-    getCurrentTab(function(tab){
-      // send message to tab to get text
-      chrome.tabs.sendMessage(tab.id, {method: "get_selected_text"}, function(resp){
-        // prepare to save
-        console.log(resp.data)
-        showHighlightPopup(tab, resp.data)
+    getKey("token", function(token){
+      if (token == null){
+        return;
+      }
+      getCurrentTab(function(tab){
+        // send message to tab to get text
+        chrome.tabs.sendMessage(tab.id, {method: "get_selected_text"}, function(resp){
+          // prepare to save
+          console.log(resp.data)
+          showHighlightPopup(tab, resp.data)
+        })
       })
     })
   }
@@ -113,7 +118,11 @@ chrome.contextMenus.create({
 chrome.contextMenus.onClicked.addListener(function(info, tab){
   if (info.menuItemId == "anotode-annotate"){
     console.log(info.selectionText)
-    showHighlightPopup(tab, info.selectionText)
+    getKey("token", function(token){
+      if (token != null){
+        showHighlightPopup(tab, info.selectionText)
+      }
+    })
   }
 })
 
