@@ -19,11 +19,11 @@ function colourText(text){
   // match half words -- some<b>word</b>
   // very slow tech
   text = text.replace(/([^\s\\])/g, '$1(<[^\>]*?>)*')
-  console.log(text)
+  // console.log(text)
   // TODO: match escaped html in code
   var hay = text.replace(/\s/g, '(<[^\>]*?>|\\s)*')
   var reg = new RegExp("(" + hay + ")")  // g option matches more than one, without g only one
-  console.log(reg)
+  // console.log(reg)
   // match and break tags (as side nesting tags is invalid)
   var bodyHtml = $(document.body).html()
   var match = bodyHtml.match(reg)
@@ -31,7 +31,7 @@ function colourText(text){
     /(<.*?>)/g,
     "</span>" + "$1" + "<span class='anotode-highlighted-text'>"
   )
-  console.log(repl)
+  // console.log(repl)
 
   $(document.body).html(
     bodyHtml.replace(
@@ -64,7 +64,11 @@ getKey("token", function(token){
       console.log(data)
       for (i=0; i<data.length; i++){
         if (data[i].url == currentUrl){
-          colourText(data[i].text)
+          try {
+            colourText(data[i].text)
+          } catch (er) {
+            console.log('Failed')
+          }
         }
       }
     }
