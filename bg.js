@@ -13,6 +13,9 @@ chrome.commands.onCommand.addListener(function(command) {
         // send message to tab to get text
         chrome.tabs.sendMessage(tab.id, {method: "get_selected_text"}, function(resp){
           // prepare to save
+          if (resp.data === "") {
+            return;
+          }
           console.log(resp.data)
           showHighlightPopup(tab, resp.data)
         })
